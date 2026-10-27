@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منظومة التقييم والتشخيص الشامل - مؤسسة العنقاء</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        burgundy: '#800020',
+                        burgundyLight: '#a61c3c',
+                        darkbg: '#0f0f0f',
+                        darkcard: '#1a1a1a',
+                        darkinput: '#262626'
+                    },
+                    fontFamily: {
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Tajawal', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f0f0f; }
+        ::-webkit-scrollbar-thumb { background: #800020; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-200 p-4 md:p-8 antialiased">
+
+    <div class="max-w-5xl mx-auto">
+        <!-- الترويسة -->
+        <header class="text-center mb-8 border-b border-gray-800 pb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-burgundy mb-2">منظومة التقييم والتشخيص السريري</h1>
+            <p class="text-gray-400 text-sm md:text-base">استمارة الفحص الشامل وتوليد البرنامج العلاجي المقترح</p>
+        </header>
+
+        <!-- شريط التبويبات (Tabs) -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+            <button type="button" onclick="switchTab('tab-basic', this)" class="tab-btn bg-burgundy text-white py-3 px-4 rounded font-bold text-sm transition">1. البيانات الأساسية والحمل</button>
+            <button type="button" onclick="switchTab('tab-growth-organic', this)" class="tab-btn bg-darkcard hover:bg-gray-800 text-gray-300 py-3 px-4 rounded font-bold text-sm border border-gray-800 transition">2. النمو والفحص العضوي</button>
+            <button type="button" onclick="switchTab('tab-behavior-history', this)" class="tab-btn bg-darkcard hover:bg-gray-800 text-gray-300 py-3 px-4 rounded font-bold text-sm border border-gray-800 transition">3. السلوك والتاريخ اللغوي</button>
+            <button type="button" onclick="switchTab('tab-language', this)" class="tab-btn bg-darkcard hover:bg-gray-800 text-gray-300 py-3 px-4 rounded font-bold text-sm border border-gray-800 transition">4. التقييم اللغوي الشامل</button>
+        </div>
+
+        <!-- النموذج الرئيسي -->
+        <form id="full-diagnostic-form" class="bg-darkcard p-6 md:p-8 rounded-lg shadow-xl border border-gray-800">
+
+            <!-- التبويب 1: استمارة البيانات الأساسية وعوامل الخطورة (الصورة 2) -->
+            <div id="tab-basic" class="tab-content active space-y-6">
+                <h2 class="text-xl font-bold text-burgundy border-b border-gray-800 pb-2">استمارة البيانات الأساسية</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">اسم الطفل</label>
+                        <input type="text" id="childName" placeholder="الاسم الكامل" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm focus:border-burgundy focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">العمر (بالسنوات)</label>
+                        <input type="number" id="childAge" min="1" max="18" value="4" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm focus:border-burgundy focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">الجنس</label>
+                        <select id="childGender" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm focus:border-burgundy focus:outline-none">
+                            <option value="ذكر">ذكر</option>
+                            <option value="أنثى">أنثى</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">التليفون</label>
+                        <input type="text" id="phone" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">عمل الأب / عمل الأم</label>
+                        <input type="text" id="parentsJob" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">عدد الأخوة</label>
+                            <input type="number" id="siblingsCount" min="0" value="2" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">ترتيب الطفل</label>
+                            <input type="number" id="childOrder" min="1" value="1" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-bold text-burgundy border-b border-gray-800 pb-2 pt-4">تاريخ الحمل والولادة وعوامل الخطورة</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex items-center space-x-3 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="familyDisability" class="h-4 w-4 accent-burgundy">
+                        <span class="text-sm">هل توجد إعاقة في العائلة أو حالة مشابهة؟</span>
+                    </label>
+                    <label class="flex items-center space-x-3 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="oxygenLack" class="h-4 w-4 accent-burgundy">
+                        <span class="text-sm">هل تعرض الطفل لنقص أكسجين بعد الولادة؟</span>
+                    </label>
+                    <label class="flex items-center space-x-3 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="pregnancyAccident" class="h-4 w-4 accent-burgundy">
+                        <span class="text-sm">هل تعرضت الأم لحادث أو مرض في فترة الحمل؟</span>
+                    </label>
+                    <label class="flex items-center space-x-3 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="consanguinity" class="h-4 w-4 accent-burgundy">
+                        <span class="text-sm">هل توجد صلة قرابة بين الوالدين؟</span>
+                    </label>
+                    <label class="flex items-center space-x-3 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="xrayExposure" class="h-4 w-4 accent-burgundy">
+                        <span class="text-sm">هل تعرضت الأم للأشعة أثناء الحمل؟</span>
+                    </label>
+                    <label class="flex items-center space-x-3 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="pregnancyMeds" class="h-4 w-4 accent-burgundy">
+                        <span class="text-sm">هل تناولت الأم أدوية خطرة فترة الحمل؟</span>
+                    </label>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">نوع الولادة ومدة الحمل</label>
+                        <select id="birthType" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="normal">طبيعية وفي موعدها (9 أشهر)</option>
+                            <option value="cesarean">قيصرية مستقرة</option>
+                            <option value="difficult">متعسرة / ولادة مبكرة (خديج)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">سن الأم وقت الولادة</label>
+                        <select id="motherAgeRisk" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="normal">طبيعي (18 - 35 سنة)</option>
+                            <option value="risk">عامل خطورة (أقل من 18 أو فوق 38 سنة)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- التبويب 2: تاريخ نمو الطفل والفحص العضوي (الصورة 2) -->
+            <div id="tab-growth-organic" class="tab-content space-y-6">
+                <h2 class="text-xl font-bold text-burgundy border-b border-gray-800 pb-2">تاريخ نمو الطفل والفحوصات الطبية</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">تسنين (ظهور الأسنان)</label>
+                        <select id="teething" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="normal">في الموعد الطبيعي (6-10 أشهر)</option>
+                            <option value="delayed">متأخر (بعد سنة)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">الحبو</label>
+                        <select id="crawling" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="normal">طبيعي (7-10 أشهر)</option>
+                            <option value="delayed">متأخر أو لم يحبُ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">المشي</label>
+                        <select id="walking" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="normal">طبيعي (11-15 شهر)</option>
+                            <option value="delayed">متأخر (بعد سنة ونصف)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <label class="flex items-center space-x-3 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="hearingIssues" class="h-4 w-4 accent-burgundy">
+                        <span class="text-sm">هل حدثت مشكلات سمعية؟</span>
+                    </label>
+                    <label class="flex items-center space-x-3 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="entConsult" class="h-4 w-4 accent-burgundy">
+                        <span class="text-sm">استشارة طبيب أنف وأذن وحنجرة؟</span>
+                    </label>
+                    <label class="flex items-center space-x-3 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="neuroConsult" class="h-4 w-4 accent-burgundy">
+                        <span class="text-sm">استشارة طبيب مخ وأعصاب؟</span>
+                    </label>
+                </div>
+
+                <h2 class="text-xl font-bold text-burgundy border-b border-gray-800 pb-2 pt-4">الفحص العضوي للطفل (حدد في حال وجود مشكلة أو ضعف)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_jawPalate" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">تشوهات الفك وسقف الحنك</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_tongueTie" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">وجود رابط لسان</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_larynx" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">إصابات في الحنجرة</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_sucking" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">ضعف في الشفط</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_chewing" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">ضعف في المضغ</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_blowing" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">ضعف في النفخ</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_jaw" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">مشكلة في الفك</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_tongue" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">ضعف عضلة اللسان</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_lips" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">مشكلة في الشفاه</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_facial" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">ضعف عضلات الوجه</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_pharynx" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">مشكلة في البلعوم</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-3 rounded border border-gray-800 cursor-pointer">
+                        <input type="checkbox" id="org_teeth" class="organic-check h-4 w-4 accent-burgundy">
+                        <span class="text-xs md:text-sm">تشوه الأسنان</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- التبويب 3: الأعراض المصاحبة والتاريخ اللغوي (الصورة 3) -->
+            <div id="tab-behavior-history" class="tab-content space-y-6">
+                <h2 class="text-xl font-bold text-burgundy border-b border-gray-800 pb-2">أعراض مصاحبة وسلوكيات مرضية (0: لا يوجد | 3: شديد)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-darkinput p-3 rounded border border-gray-800">
+                        <label class="flex justify-between text-xs text-gray-300 mb-2">
+                            <span>ضعف الانتباه والتركيز</span>
+                            <output id="out_attention" class="font-bold text-burgundyLight">0</output>
+                        </label>
+                        <input type="range" id="beh_attention" min="0" max="3" value="0" class="w-full accent-burgundy" oninput="document.getElementById('out_attention').value = this.value">
+                    </div>
+                    <div class="bg-darkinput p-3 rounded border border-gray-800">
+                        <label class="flex justify-between text-xs text-gray-300 mb-2">
+                            <span>قصور مدة التواصل البصري</span>
+                            <output id="out_eye" class="font-bold text-burgundyLight">0</output>
+                        </label>
+                        <input type="range" id="beh_eyeContact" min="0" max="3" value="0" class="w-full accent-burgundy" oninput="document.getElementById('out_eye').value = this.value">
+                    </div>
+                    <div class="bg-darkinput p-3 rounded border border-gray-800">
+                        <label class="flex justify-between text-xs text-gray-300 mb-2">
+                            <span>نشاط زائد (فرط حركة)</span>
+                            <output id="out_hyper" class="font-bold text-burgundyLight">0</output>
+                        </label>
+                        <input type="range" id="beh_hyperactivity" min="0" max="3" value="0" class="w-full accent-burgundy" oninput="document.getElementById('out_hyper').value = this.value">
+                    </div>
+                    <div class="bg-darkinput p-3 rounded border border-gray-800">
+                        <label class="flex justify-between text-xs text-gray-300 mb-2">
+                            <span>توتر وقلق</span>
+                            <output id="out_anxiety" class="font-bold text-burgundyLight">0</output>
+                        </label>
+                        <input type="range" id="beh_anxiety" min="0" max="3" value="0" class="w-full accent-burgundy" oninput="document.getElementById('out_anxiety').value = this.value">
+                    </div>
+                    <div class="bg-darkinput p-3 rounded border border-gray-800">
+                        <label class="flex justify-between text-xs text-gray-300 mb-2">
+                            <span>خجل</span>
+                            <output id="out_shyness" class="font-bold text-burgundyLight">0</output>
+                        </label>
+                        <input type="range" id="beh_shyness" min="0" max="3" value="0" class="w-full accent-burgundy" oninput="document.getElementById('out_shyness').value = this.value">
+                    </div>
+                    <div class="bg-darkinput p-3 rounded border border-gray-800">
+                        <label class="flex justify-between text-xs text-gray-300 mb-2">
+                            <span>عنف وعدوانية</span>
+                            <output id="out_violence" class="font-bold text-burgundyLight">0</output>
+                        </label>
+                        <input type="range" id="beh_violence" min="0" max="3" value="0" class="w-full accent-burgundy" oninput="document.getElementById('out_violence').value = this.value">
+                    </div>
+                    <div class="bg-darkinput p-3 rounded border border-gray-800">
+                        <label class="flex justify-between text-xs text-gray-300 mb-2">
+                            <span>خوف</span>
+                            <output id="out_fear" class="font-bold text-burgundyLight">0</output>
+                        </label>
+                        <input type="range" id="beh_fear" min="0" max="3" value="0" class="w-full accent-burgundy" oninput="document.getElementById('out_fear').value = this.value">
+                    </div>
+                    <div class="bg-darkinput p-3 rounded border border-gray-800">
+                        <label class="flex justify-between text-xs text-gray-300 mb-2">
+                            <span>عناد</span>
+                            <output id="out_stubborn" class="font-bold text-burgundyLight">0</output>
+                        </label>
+                        <input type="range" id="beh_stubbornness" min="0" max="3" value="0" class="w-full accent-burgundy" oninput="document.getElementById('out_stubborn').value = this.value">
+                    </div>
+                    <div class="bg-darkinput p-3 rounded border border-gray-800 flex items-center">
+                        <label class="flex items-center space-x-2 space-x-reverse cursor-pointer w-full">
+                            <input type="checkbox" id="beh_incontinence" class="h-4 w-4 accent-burgundy">
+                            <span class="text-xs md:text-sm">عدم التحكم في عملية البول (تبول لاإرادي)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <h2 class="text-xl font-bold text-burgundy border-b border-gray-800 pb-2 pt-4">التاريخ اللغوي</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">متى بدأت المناغاة؟</label>
+                        <select id="hist_babbling" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="normal">طبيعي (4-6 أشهر)</option>
+                            <option value="delayed">متأخرة / لم يناغِ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">متى كانت أول كلمة؟</label>
+                        <select id="hist_firstWord" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="normal">طبيعي (10-14 شهر)</option>
+                            <option value="delayed">متأخرة (بعد سنتين / لم ينطق)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">بداية تكوين الجمل</label>
+                        <select id="hist_sentences" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="normal">ينطق جمل طبيعياً</option>
+                            <option value="delayed">متأخر / لا يكوّن جمل</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">كم كلمة ينطقها حالياً؟</label>
+                        <select id="hist_wordsCount" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="many">حصيلة طبيعية (أكثر من 50 كلمة)</option>
+                            <option value="few">قليلة (أقل من 10 كلمات)</option>
+                            <option value="none">لا ينطق كلمات (0)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- التبويب 4: اللغة الداخلية، الاستقبالية، والتعبيرية (الصورة 3) -->
+            <div id="tab-language" class="tab-content space-y-6">
+                <h2 class="text-xl font-bold text-burgundy border-b border-gray-800 pb-2">اللغة الداخلية (المهارات الإدراكية ما قبل اللغوية)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">استخدام ودوام الشيء</label>
+                        <select id="inner_permanence" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="0">مكتسب (سليم)</option>
+                            <option value="1">ضعيف</option>
+                            <option value="2">غير مكتسب</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">العلاقة السببية</label>
+                        <select id="inner_causality" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="0">مكتسب (سليم)</option>
+                            <option value="1">ضعيف</option>
+                            <option value="2">غير مكتسب</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">الانعكاسية (التقليد)</label>
+                        <select id="inner_imitation" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="0">مكتسب (يقلد)</option>
+                            <option value="1">ضعيف</option>
+                            <option value="2">غير مكتسب (لا يقلد)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">ثبات الشيء</label>
+                        <select id="inner_constancy" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="0">مكتسب (سليم)</option>
+                            <option value="1">ضعيف</option>
+                            <option value="2">غير مكتسب</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h2 class="text-xl font-bold text-burgundy border-b border-gray-800 pb-2 pt-4">اللغة الاستقبالية (حدد المجموعات الضمنية التي يعرفها الطفل ويميزها)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="أجزاء الجسم" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">أجزاء الجسم</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="الأهل" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">الأهل</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="الفاكهة" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">الفاكهة</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="الخضروات" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">الخضروات</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="أدوات المائدة" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">أدوات المائدة</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="الأجهزة المنزلية" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">الأجهزة المنزلية</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="أثاث المنزل" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">أثاث المنزل</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="حيوانات المزرعة" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">حيوانات المزرعة</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="حيوانات الغابة" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">حيوانات الغابة</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="الأعداد والأشكال الهندسية" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">الأعداد الهندسية</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="الألوان" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">الألوان</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="المواصلات" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">المواصلات</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="الحروف الهجائية" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">الحروف الهجائية</span></label>
+                    <label class="flex items-center space-x-2 space-x-reverse bg-darkinput p-2.5 rounded border border-gray-800 cursor-pointer"><input type="checkbox" value="مجموعات أخرى" checked class="receptive-group h-4 w-4 accent-burgundy"><span class="text-sm">مجموعات أخرى</span></label>
+                </div>
+
+                <h2 class="text-xl font-bold text-burgundy border-b border-gray-800 pb-2 pt-4">اللغة التعبيرية</h2>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">التركيب الصوتي</label>
+                        <select id="exp_phonetic" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="0">سليم</option>
+                            <option value="1">متوسط (إبدال/حذف)</option>
+                            <option value="2">ضعيف جداً / مشوه</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">حجم المفردات</label>
+                        <select id="exp_vocab" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="0">مناسب للعمر</option>
+                            <option value="1">محدود</option>
+                            <option value="2">فقير جداً / معدوم</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">السرد والحكاية</label>
+                        <select id="exp_narration" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="0">يروي أحداث متسلسلة</option>
+                            <option value="1">متقطع / متعثر</option>
+                            <option value="2">لا يستطيع السرد</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">المضمون</label>
+                        <select id="exp_content" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="0">مفهوم ومترابط</option>
+                            <option value="1">ضعيف الترابط</option>
+                            <option value="2">غير ذي معنى</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">السياق (توظيف اللغة)</label>
+                        <select id="exp_context" class="w-full bg-darkinput border border-gray-700 rounded p-2 text-sm">
+                            <option value="0">مناسب للموقف</option>
+                            <option value="1">ترديد (أكولاليا) أحياناً</option>
+                            <option value="2">خارج السياق تماماً</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- زر توليد التقرير -->
+            <div class="mt-8 pt-6 border-t border-gray-800 flex justify-center">
+                <button type="button" onclick="generateClinicalReport()" class="bg-burgundy hover:bg-burgundyLight text-white font-bold py-3.5 px-12 rounded-full shadow-lg transition duration-300 text-base">
+                    إصدار التقرير التشخيصي والبرنامج العلاجي
+                </button>
+            </div>
+        </form>
+
+        <!-- قسم المخرجات: مطابق لورقة (نتائج الاختبارات المطبقة والبرنامج العلاجي المقترح - الصورة 1) -->
+        <div id="report-container" class="mt-10 bg-darkcard p-6 md:p-8 rounded-lg shadow-2xl border-2 border-burgundy hidden space-y-8">
+            <div class="text-center border-b border-gray-800 pb-4">
+                <h2 class="text-2xl font-bold text-white">التقرير السريري المبدئي</h2>
+                <p id="report-patient-info" class="text-gray-400 text-sm mt-1"></p>
+            </div>
+
+            <!-- مؤشر صعوبات التعلم من 100 -->
+            <div class="bg-darkinput p-5 rounded-lg border border-gray-700">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-bold text-base text-white">مؤشر احتمالية صعوبات وبطء التعلم:</span>
+                    <span id="ld-percentage-badge" class="text-xl font-bold px-3 py-1 rounded">0%</span>
+                </div>
+                <div class="w-full bg-gray-800 rounded-full h-3.5 mb-2 overflow-hidden">
+                    <div id="ld-progress-bar" class="bg-burgundy h-3.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p id="ld-status-text" class="text-sm text-gray-300 mt-2"></p>
+            </div>
+
+            <!-- جدول: نتائج الاختبارات المطبقة (الـ 8 اختبارات في الورقة الأولى) -->
+            <div>
+                <h3 class="text-xl font-bold text-burgundy mb-4 border-b border-gray-800 pb-2">أولاً: نتائج الاختبارات المطبقة / الموصى بها</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right border-collapse">
+                        <thead>
+                            <tr class="bg-darkinput text-gray-300 text-sm border-b border-gray-700">
+                                <th class="p-3 w-1/3">الاختبار</th>
+                                <th class="p-3 w-1/4">الحالة / الأولوية</th>
+                                <th class="p-3">المبررات السريرية من الاستمارة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tests-table-body" class="divide-y divide-gray-800 text-sm">
+                            <!-- يتم تعبئته برمجياً -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- البرنامج العلاجي المقترح (المحاور الـ 4 في الورقة الأولى) -->
+            <div>
+                <h3 class="text-xl font-bold text-burgundy mb-4 border-b border-gray-800 pb-2">ثانياً: البرنامج العلاجي المقترح</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-darkinput p-4 rounded border border-gray-800">
+                        <h4 class="font-bold text-burgundyLight mb-2">١- التركيز والانتباه :-</h4>
+                        <p id="plan-attention" class="text-sm text-gray-300 leading-relaxed"></p>
+                    </div>
+                    <div class="bg-darkinput p-4 rounded border border-gray-800">
+                        <h4 class="font-bold text-burgundyLight mb-2">٢- اللغة السلبية (الاستقبالية) :-</h4>
+                        <p id="plan-receptive" class="text-sm text-gray-300 leading-relaxed"></p>
+                    </div>
+                    <div class="bg-darkinput p-4 rounded border border-gray-800">
+                        <h4 class="font-bold text-burgundyLight mb-2">٣- اللغة الإيجابية (التعبيرية) :-</h4>
+                        <p id="plan-expressive" class="text-sm text-gray-300 leading-relaxed"></p>
+                    </div>
+                    <div class="bg-darkinput p-4 rounded border border-gray-800">
+                        <h4 class="font-bold text-burgundyLight mb-2">٤- الأصوات (والنطق العضوي) :-</h4>
+                        <p id="plan-sounds" class="text-sm text-gray-300 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
